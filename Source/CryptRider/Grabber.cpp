@@ -3,6 +3,7 @@
 
 #include "Grabber.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h" 
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -30,12 +31,22 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FRotator MyRotation = GetComponentRotation();
-	FString MyRotationString = MyRotation.ToCompactString();
+	UWorld *World = GetWorld();
 
-	UE_LOG(LogTemp, Warning, TEXT("Hello %s"), *MyRotationString);
-	UWorld*  World = GetWorld();
-	float Time = World->TimeSeconds;
-	UE_LOG(LogTemp, Display, TEXT("Your Current time is: %f"), Time);
+	FVector Start = GetComponentLocation();
+	FVector forward = GetForwardVector();
+	FVector End = Start + forward * MaxGrabDistance;
+	DrawDebugLine(World, Start, End, FColor::Red);
+
+	float Damage = 5;
+	PrintDamage(Damage);
+	UE_LOG(LogTemp, Display, TEXT("Your message%f"), Damage);
+
+}
+
+void UGrabber::PrintDamage(float& Damage)
+{
+	Damage = 2;
+	UE_LOG(LogTemp, Display, TEXT("Your message%f"), Damage);
 }
 
