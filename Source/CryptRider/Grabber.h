@@ -15,6 +15,7 @@ class CRYPTRIDER_API UGrabber : public USceneComponent
 public:	
 	// Sets default values for this component's properties
 	UGrabber();
+	
 
 protected:
 	// Called when the game starts
@@ -23,10 +24,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+	void Release();
+	UFUNCTION(BlueprintCallable)
+	void Grabbed();
+
 	private:
 	UPROPERTY(EditAnywhere)
 	float MaxGrabDistance = 400;
-
-	void PrintDamage(float& Damage);
+	UPROPERTY(EditAnywhere)
+	float GrabRadius = 100;
 		
 };
