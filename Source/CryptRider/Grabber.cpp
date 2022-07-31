@@ -4,6 +4,7 @@
 #include "Grabber.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h" 
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -21,7 +22,7 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	UPhysicsHandleComponent* PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	
 }
 
@@ -49,15 +50,18 @@ void UGrabber::Grabbed()
 	DrawDebugLine(World, Start, End, FColor::Red);
 
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
-	FHitResult HitResult;
+	FHitResult HitResult;	
 
 	bool HasHit = GetWorld()->SweepSingleByChannel(HitResult, Start, End, FQuat::Identity, ECC_GameTraceChannel2, Sphere);
 	
 	if(HasHit)
 	{
+		DrawDebugSphere(World, HitResult.Location, 10, 12, FColor::Red, false, 3);
+		DrawDebugSphere(World, HitResult.ImpactPoint, 10, 12, FColor::Blue, false, 3);
 		AActor* HitActor = HitResult.GetActor();
-
+		
 		UE_LOG(LogTemp, Display, TEXT("Hit %s"), *HitActor->GetActorNameOrLabel());
+		
 	}
 	else 
 	UE_LOG(LogTemp, Display, TEXT("No hit"));
